@@ -2,12 +2,12 @@
   
   <p> My name is Nathan and I am a French developper </p>
   <p> I want to dedicate my life to do things that I love. A long Journey 😜 </p>
-  <p> You can see lower, my equipment for this long adventure that awaits me. </p>
+  <p> You can see below, my equipment for this long adventure that awaits me. </p>
   
   <br>
   
   <h2> 🏴‍☠️ The Goal 🏴‍☠️ </h2>
-  <p> My main goal is, in some years, to buy a ship, and continue to learning and codding in this boat. </p>
+  <p> My main goal is, in some years, to buy a ship, and continue to learning and codding on this boat. </p>
   <p> I have to goal to travel arround the world in a beautifull wooden ship ! And, why not, found some treasurs... </p>
   <p> I don't target the moon, I target the world. </p>
   
