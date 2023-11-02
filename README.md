@@ -1,4 +1,4 @@
-<h1> <================ ⚓ Hello Sailors ! ⚓ ===============> </h1>
+<h1>                     ⚓ Hello Sailors ! ⚓</h1>
   
   <p> My name is Nathan and I am a French developper </p>
   <p> I want to dedicate my life to do things that I love. A long Journey 😜 </p>
