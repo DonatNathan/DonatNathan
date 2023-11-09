@@ -28,13 +28,15 @@ I have to goal to travel arround the world in a beautifull wooden ship ! And, wh
 
 ## Personal projects
 
-Date start | Duration | Name | Language
----------- | -------- | ---- | --------
-January 2022 | 1 week | Epitech's projects Portfolio | React.js
-May 2022 | 2 weeks | Perlin noise map generator | C# / Unity
-July 2023 | 1 week | 2D map generator | C++
-September 2023 | 2 months | Discord Bot and website for MK8DX tournaments | Python / React.js / MongoDB
-March 22 | 2 months | Rpg graphical project | C / CSFML
+Date start | Duration | Name | Language | Type
+---------- | -------- | ---- | -------- | ----
+January 2022 | 1 week | Epitech's projects Portfolio | React.js | Personal
+February 2022 | 1 week | Copy of sokoban game | C / Ncurses | Epitech
+March 22 | 2 months | Rpg graphical project | C / CSFML | Epitech
+May 2022 | 2 weeks | Perlin noise map generator | C# / Unity | Personal
+October 2022 | 1 day | Game of Life variants | C | Personal 
+July 2023 | 1 week | 2D map generator | C++ | Personal 
+September 2023 | 2 months | Discord Bot and website for MK8DX tournaments | Python / React.js / MongoDB | Epitech
 
 ## See you later on the ocean
 
