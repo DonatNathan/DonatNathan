@@ -1,55 +1,41 @@
-<h1>                     ⚓ Hello Sailors ! ⚓</h1>
-  
-  <p> My name is Nathan and I am a French developper </p>
-  <p> I want to dedicate my life to do things that I love. A long Journey 😜 </p>
-  <p> You can see below, my equipment for this long adventure that awaits me. </p>
-  
-  <br>
-  
-  <h2> 🏴‍☠️ The Goal 🏴‍☠️ </h2>
-  <p> My main goal is, in some years, to buy a ship, and continue to learning and codding on this boat. </p>
-  <p> I have to goal to travel arround the world in a beautifull wooden ship ! And, why not, found some treasurs... </p>
-  <p> I don't target the moon, I target the world. </p>
-  
-  <br>
-  
-  <h2> 📖 Donat's logbook 📖 <h2>
-    <ul>
-      <li><strong>January 2021 : </strong>I start to learn Python at school</li>
-      <li><strong>March 2021 : </strong>Creation of a blog in HTML/CSS</li>
-      <li><strong>October 2021 : </strong>C learning at Epitech<br>
-        -> Many projects realized<br>
-        -> Learning of Github<br>
-        -> Introduction to graphical programming</li>
-      <li><strong>January 2022 : </strong>Portfolio in ReactJS to introduce my projects</li>
-      <li><strong>May 2022 : </strong>3D video game in C# using Unity3D</li>
-      <li><strong>June 2022 : </strong>Back to my Pirates Roots: I'm going Sailing</li>
-      <li><strong>August 2022 : </strong>Internship using Python/Django</li>
-      <li><strong>October 2022 : </strong>I start a fullstack Django project for a Mario Kart team</li>
-    </ul>
-  
-  <br>
+# ⚓ Hello Sailors ! ⚓
 
-  <h2> 🗺️ The Maps 🗺️ </h2>
+My name is Nathan and I am a French developper and Epitech student.\
+\
+I want to dedicate my life to do things that I love. A long Journey 😜\
+\
+You can see below, my equipment for this long adventure that awaits me.
 
-  ![image](https://user-images.githubusercontent.com/91681379/198899341-e56437eb-ebba-4727-ae2e-e4b503dffeda.png) ![image](https://user-images.githubusercontent.com/91681379/198899289-5a8fd92a-e571-43aa-8d22-b0455bb1bdf5.png)
+## The Goal
+My main goal is, in some years, to buy a ship, and continue to learning and codding on this boat.\
+\
+I have to goal to travel arround the world in a beautifull wooden ship ! And, why not, found some treasurs...
 
-  <br>
+> I don't target the moon, I target the world.
 
-  <h2> 🌊 See you later on the ocean 🌊 </h2>
-  <p>I hope you will enjoy this presentation and I you like programmation and pirates, follow me for many adventures. </p>
+## Logbook
 
-<!--
-**DonatNathan/DonatNathan** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+- **January 2021 :** I start to learn Python at school
+- **March 2021 :** Creation of a blog in HTML/CSS
+- **October 2021** : C learning at Epitech
+  - Many projects realized
+  - Learning of Github
+  - Introduction to graphical programming
+- **January 2022 :** Portfolio in ReactJS to introduce my Epitech projects
+- **May 2022 :** Perlin Noise map *C# / Unity*
+- **June 2022 :** Back to my Pirates roots: I'm going Sailing *no code*
+- **August 2022 :** Internship as fullstack developer *Python/Django*
 
-Here are some ideas to get you started:
+## Personal projects
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+Date start | Duration | Name | Language
+---------- | -------- | ---- | --------
+January 2022 | 1 week | Epitech's projects Portfolio | React.js
+May 2022 | 2 weeks | Perlin noise map generator | C# / Unity
+July 2023 | 1 week | 2D map generator | C++
+September 2023 | 2 months | Discord Bot and website for MK8DX tournaments | Python / React.js / MongoDB
+March 22 | 2 months | Rpg graphical project | C / CSFML
+
+## See you later on the ocean
+
+I hope you will enjoy this presentation and if you like programmation and pirates, follow me for many adventures.
