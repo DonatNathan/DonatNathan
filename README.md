@@ -13,8 +13,6 @@ I have to goal to travel arround the world in a beautifull wooden ship ! And, wh
 
 > I don't target the moon, I target the world.
 
-![Donat's GitHub stats](https://github-readme-stats.vercel.app/api?username=donatnathan&show_icons=true&theme=gruvbox)
-
 ![trophy](https://github-profile-trophy.vercel.app/?username=donatnathan&theme=gruvbox)
 
 ## Logbook
