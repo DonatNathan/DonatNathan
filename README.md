@@ -12,15 +12,6 @@
 </p>
 <br />
 <h2>
-  :gear: Stats
-</h2>
-<br />
-
-![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=donatnathan&theme=dark&show_icons=true)
-
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=donatnathan&layout=donut&theme=dark)
-<br />
-<h2>
   :rocket: Goal
 </h2>
 <br />
