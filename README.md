@@ -1,4 +1,4 @@
-![Banner-Just-a-dev](https://github.com/user-attachments/assets/25b6c5ad-258d-421a-a02c-8ac14696c13a)
+<img width="1584" height="396" alt="github_banner" src="https://github.com/user-attachments/assets/09baf39a-031a-412d-a446-9b07003e0c8b" />
 
 <h1 align="center">
   Hello Sailors ⚓
