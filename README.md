@@ -15,18 +15,45 @@
 ## 📜 Captain's Log
 
 <!-- CAPTAINS-LOG:START -->
-> 📜 **Captain's Log, day 1,882 at sea** (25 November 2026)
->
-> 🌊 Spyglass pointed at **Saint-Malo**: overcast ☁️, 10°C, winds at 26 km/h.
->
-> 🦜 *"Not all treasure is silver and gold, mate."*
+### Day 1,882 at sea
+<sub>25 November 2026</sub>
+
+🗺️ **Last seen plundering** [foundry\-coding\-style](https://github.com/DonatNathan/foundry-coding-style), *1 day ago*
+
+🦜 **The parrot overheard** `add: link to referenced rules` and won't stop repeating:
+
+> ***Blimey\! bring aboard: link to referenced rules\! Hoist the colours\!***
 <!-- CAPTAINS-LOG:END -->
 
-## 💰 Most Wanted
+## 🏴‍☠️ Ship's Ledger
 
+<!-- LEDGER:START -->
+**🏴‍☠️ Rank:** Quartermaster  
+`█████████████░░░░░░░` 67% of the way to **First Mate**
+
+**💰 Bounty:** 30,030 doubloons on me head
+
+| ⚔️ Commits plundered | 🚢 Ships commanded | ⭐ Stars stolen | 🦜 Crew members |
+| :-: | :-: | :-: | :-: |
+| **1,683** | **17** | **11** | **24** |
+<!-- LEDGER:END -->
+
+## 🦜 Latest Recruits
+
+*Fresh faces aboard, welcome to the crew!*
+
+<!-- RECRUITS:START -->
 <p align="center">
-  <img src="./assets/bounty.svg" width="75%" alt="Wanted poster with GitHub stats" />
+  <a href="https://github.com/David-JUDEA"><img src="./assets/recruits/1.svg" width="90" alt="David-JUDEA" /></a>
+  <a href="https://github.com/yassay78"><img src="./assets/recruits/2.svg" width="90" alt="yassay78" /></a>
+  <a href="https://github.com/ITRecruitersachin"><img src="./assets/recruits/3.svg" width="90" alt="ITRecruitersachin" /></a>
+  <a href="https://github.com/AMOUSSOUCHRISTIAN"><img src="./assets/recruits/4.svg" width="90" alt="AMOUSSOUCHRISTIAN" /></a>
+  <a href="https://github.com/MountainEnjoyer"><img src="./assets/recruits/5.svg" width="90" alt="MountainEnjoyer" /></a>
+  <a href="https://github.com/Sonny-Fourmont"><img src="./assets/recruits/6.svg" width="90" alt="Sonny-Fourmont" /></a>
+  <a href="https://github.com/NoahTesson"><img src="./assets/recruits/7.svg" width="90" alt="NoahTesson" /></a>
+  <a href="https://github.com/ValentinPy1"><img src="./assets/recruits/8.svg" width="90" alt="ValentinPy1" /></a>
 </p>
+<!-- RECRUITS:END -->
 
 ## 🐍 Here Be Serpents
 
@@ -37,9 +64,13 @@
   <img width="100%" alt="Sea serpent eating the contribution graph" src="https://raw.githubusercontent.com/DonatNathan/DonatNathan/output/sea-serpent.svg" />
 </picture>
 
-## 👋 See you on the ocean
+## 🍾 Bottles Washed Ashore
 
-If you like **programming** and **pirates**, follow me for many **adventures**.
+<!-- BOTTLES:START -->
+> *No bottles have washed ashore yet... be the first to throw one!*
+<!-- BOTTLES:END -->
+
+<br/>
 
 <p align="center">
   <a href="https://github.com/DonatNathan/DonatNathan/issues/new?title=%F0%9F%8D%BE%20Message%20in%20a%20bottle&body=Ahoy%20Captain!%0A%0A">
