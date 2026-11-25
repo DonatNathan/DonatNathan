@@ -1,14 +1,17 @@
 """Update the Captain's Log section of README.md and regenerate assets/bounty.svg.
 
-Runs daily from .github/workflows/captains-log.yml. Uses only the standard library.
+Runs daily from .github/workflows/captains-log.yml. Uses only the standard library;
+if fontTools is installed, the embedded fonts are subset to keep the poster small.
 """
 
+import base64
+import io
 import json
 import os
 import random
 import re
 import urllib.request
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 from html import escape
 from pathlib import Path
 
@@ -17,6 +20,7 @@ TOKEN = os.environ.get("GITHUB_TOKEN", "")
 ROOT = Path(__file__).resolve().parents[2]
 README = ROOT / "README.md"
 BOUNTY = ROOT / "assets" / "bounty.svg"
+FONTS = ROOT / "assets" / "fonts"
 
 QUOTES = [
     "Not all treasure is silver and gold, mate.",
@@ -71,10 +75,14 @@ WEATHER_CODES = {
 }
 
 
-def get_json(url, headers=None):
+def fetch(url, headers=None):
     req = urllib.request.Request(url, headers={"User-Agent": "readme-captains-log", **(headers or {})})
     with urllib.request.urlopen(req, timeout=20) as resp:
-        return json.load(resp)
+        return resp.read(), resp.headers.get_content_type()
+
+
+def get_json(url, headers=None):
+    return json.loads(fetch(url, headers)[0])
 
 
 def gh(path):
@@ -110,6 +118,8 @@ def fetch_stats():
         commits = None
     created = datetime.fromisoformat(user["created_at"].replace("Z", "+00:00")).date()
     return {
+        "name": user["name"] or user["login"],
+        "avatar_url": user["avatar_url"],
         "created": created,
         "repos": user["public_repos"],
         "followers": user["followers"],
@@ -131,50 +141,153 @@ def captains_log(stats, today, rng):
     )
 
 
+def font_data_uri(filename, text):
+    """Embed a font as a data URI, subset to the characters used when fontTools is available."""
+    raw = (FONTS / filename).read_bytes()
+    try:
+        from fontTools import subset
+        from fontTools.ttLib import TTFont
+
+        font = TTFont(io.BytesIO(raw))
+        subsetter = subset.Subsetter(subset.Options())
+        subsetter.populate(text=text)
+        subsetter.subset(font)
+        out = io.BytesIO()
+        font.save(out)
+        raw = out.getvalue()
+    except ImportError:
+        pass
+    return "data:font/ttf;base64," + base64.b64encode(raw).decode()
+
+
+def avatar_data_uri(url):
+    data, ctype = fetch(f"{url}&s=480" if "?" in url else f"{url}?s=480")
+    return f"data:{ctype};base64," + base64.b64encode(data).decode()
+
+
 def bounty_svg(stats):
     bounty = (stats["commits"] or 0) * 10 + stats["stars"] * 500 + stats["followers"] * 250 + stats["repos"] * 100
-    lines = [
-        ("Commits plundered", stats["commits"] if stats["commits"] is not None else "???"),
-        ("Ships (repos) commanded", stats["repos"]),
-        ("Stars stolen", stats["stars"]),
-        ("Crew (followers)", stats["followers"]),
-    ]
-    rows = "\n".join(
-        f'  <text x="40" y="{300 + i * 34}" class="row">{escape(label)}</text>'
-        f'<text x="320" y="{300 + i * 34}" class="row" text-anchor="end">{escape(str(value))}</text>'
-        for i, (label, value) in enumerate(lines)
-    )
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="360" height="480" viewBox="0 0 360 480">
+    commits = f"{stats['commits']:,}" if stats["commits"] is not None else "???"
+    name = stats["name"].upper()
+    amount = f"{bounty:,}"
+    tagline = "DEAD OR ALIVE"
+    crimes = f"{commits} commits plundered  ·  {stats['repos']} ships  ·  {stats['stars']} stars stolen  ·  {stats['followers']} crew"
+    decree = "By order of the Admiralty of the Seven Seas"
+
+    rye = font_data_uri("Rye-Regular.ttf", "WANTED" + name + amount + "DOUBLOONS")
+    fell = font_data_uri("IMFellEnglish-Regular.ttf", tagline + crimes + decree + "REWARD")
+    avatar = avatar_data_uri(stats["avatar_url"])
+
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="420" height="620" viewBox="0 0 420 620">
   <style>
-    .title {{ font: bold 64px Georgia, 'Times New Roman', serif; fill: #3b2414; letter-spacing: 6px; }}
-    .sub {{ font: italic 18px Georgia, serif; fill: #5a3a22; }}
-    .name {{ font: bold 30px Georgia, serif; fill: #3b2414; }}
-    .row {{ font: 16px Georgia, serif; fill: #3b2414; }}
-    .bounty {{ font: bold 30px Georgia, serif; fill: #7a1f12; }}
+    @font-face {{ font-family: 'Rye'; src: url({rye}) format('truetype'); }}
+    @font-face {{ font-family: 'Fell'; src: url({fell}) format('truetype'); }}
+    .rye {{ font-family: 'Rye', Georgia, serif; fill: #2a170b; }}
+    .fell {{ font-family: 'Fell', Georgia, serif; fill: #2a170b; }}
   </style>
   <defs>
-    <radialGradient id="paper" cx="50%" cy="45%" r="70%">
-      <stop offset="0%" stop-color="#f6e7c1"/>
-      <stop offset="75%" stop-color="#e3c48d"/>
-      <stop offset="100%" stop-color="#b8894d"/>
+    <radialGradient id="paperFill" cx="50%" cy="46%" r="68%">
+      <stop offset="0%" stop-color="#f1dfb0"/>
+      <stop offset="55%" stop-color="#e2c38a"/>
+      <stop offset="85%" stop-color="#c49556"/>
+      <stop offset="100%" stop-color="#7d4f22"/>
     </radialGradient>
+
+    <!-- Torn edges, coffee/water stains and fibre grain -->
+    <filter id="paper" x="-6%" y="-6%" width="112%" height="112%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="5" seed="4" result="edgeNoise"/>
+      <feDisplacementMap in="SourceGraphic" in2="edgeNoise" scale="20" xChannelSelector="R" yChannelSelector="G" result="torn"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="21" result="blots"/>
+      <feColorMatrix in="blots" type="matrix" values="0 0 0 0 0.36  0 0 0 0 0.2  0 0 0 0 0.07  2.6 0 0 0 -1.25" result="stains"/>
+      <feComposite in="stains" in2="torn" operator="in" result="stainsOnPaper"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="9" result="fine"/>
+      <feColorMatrix in="fine" type="matrix" values="0 0 0 0 0.25  0 0 0 0 0.14  0 0 0 0 0.05  1.6 0 0 0 -0.62" result="grain"/>
+      <feComposite in="grain" in2="torn" operator="in" result="grainOnPaper"/>
+      <feMerge>
+        <feMergeNode in="torn"/>
+        <feMergeNode in="stainsOnPaper"/>
+        <feMergeNode in="grainOnPaper"/>
+      </feMerge>
+    </filter>
+
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="6"/>
+      <feOffset dx="3" dy="6"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.45"/></feComponentTransfer>
+      <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Worn letterpress ink: wobbly edges and patchy coverage -->
+    <filter id="ink" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.55" numOctaves="2" seed="2" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="wobble"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -2.6 0 0 0 2.25" result="wear"/>
+      <feComposite in="wobble" in2="wear" operator="in"/>
+    </filter>
+
+    <!-- Old photograph: sepia, crushed contrast, grain -->
+    <filter id="sepia" x="0" y="0" width="100%" height="100%">
+      <feColorMatrix type="matrix" values="0.39 0.77 0.19 0 0  0.35 0.69 0.17 0 0  0.27 0.53 0.13 0 0  0 0 0 1 0" result="tone"/>
+      <feComponentTransfer in="tone" result="contrast">
+        <feFuncR type="linear" slope="1.25" intercept="-0.12"/>
+        <feFuncG type="linear" slope="1.25" intercept="-0.14"/>
+        <feFuncB type="linear" slope="1.2" intercept="-0.14"/>
+      </feComponentTransfer>
+      <feTurbulence type="fractalNoise" baseFrequency="0.95" numOctaves="2" seed="13" result="pg"/>
+      <feColorMatrix in="pg" type="matrix" values="0 0 0 0 0.18  0 0 0 0 0.1  0 0 0 0 0.03  0.9 0 0 0 -0.48" result="pgrain"/>
+      <feComposite in="pgrain" in2="SourceGraphic" operator="in" result="pgrainIn"/>
+      <feMerge><feMergeNode in="contrast"/><feMergeNode in="pgrainIn"/></feMerge>
+    </filter>
+
+    <radialGradient id="vignette" cx="50%" cy="50%" r="62%">
+      <stop offset="60%" stop-color="#3a2210" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#3a2210" stop-opacity="0.6"/>
+    </radialGradient>
+
+    <radialGradient id="nailHead" cx="38%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#d9d4cc"/>
+      <stop offset="45%" stop-color="#7c7468"/>
+      <stop offset="100%" stop-color="#2c2620"/>
+    </radialGradient>
+
+    <clipPath id="photoClip"><rect x="100" y="186" width="220" height="220"/></clipPath>
   </defs>
-  <rect x="4" y="4" width="352" height="472" rx="6" fill="url(#paper)" stroke="#6b4423" stroke-width="3"/>
-  <rect x="16" y="16" width="328" height="448" fill="none" stroke="#6b4423" stroke-width="1.5" stroke-dasharray="6 4"/>
-  <text x="180" y="86" class="title" text-anchor="middle">WANTED</text>
-  <text x="180" y="114" class="sub" text-anchor="middle">dead or alive, preferably online</text>
-  <g transform="translate(180 170)" fill="#3b2414">
-    <circle cx="0" cy="-8" r="30"/>
-    <rect x="-16" y="12" width="32" height="18" rx="4"/>
-    <circle cx="-11" cy="-10" r="8" fill="#f2deb0"/>
-    <circle cx="11" cy="-10" r="8" fill="#f2deb0"/>
-    <path d="M-3 4 L0 -2 L3 4 Z" fill="#f2deb0"/>
-    <path d="M-48 36 L48 -20 M-48 -20 L48 36" stroke="#3b2414" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Paper -->
+  <g filter="url(#shadow)">
+    <rect x="18" y="16" width="384" height="588" fill="url(#paperFill)" filter="url(#paper)"/>
   </g>
-  <text x="180" y="262" class="name" text-anchor="middle">Captain {escape(USER)}</text>
-{rows}
-  <line x1="40" y1="428" x2="320" y2="428" stroke="#6b4423" stroke-width="1"/>
-  <text x="180" y="458" class="bounty" text-anchor="middle">฿ {bounty:,} doubloons</text>
+
+  <!-- Printed content -->
+  <g filter="url(#ink)">
+    <rect x="38" y="36" width="344" height="548" fill="none" stroke="#2a170b" stroke-width="3"/>
+    <rect x="45" y="43" width="330" height="534" fill="none" stroke="#2a170b" stroke-width="1"/>
+
+    <text x="210" y="128" class="rye" font-size="84" text-anchor="middle" textLength="300" lengthAdjust="spacingAndGlyphs">WANTED</text>
+    <line x1="70" y1="146" x2="350" y2="146" stroke="#2a170b" stroke-width="1.5"/>
+    <text x="210" y="164" class="fell" font-size="17" text-anchor="middle" letter-spacing="7">{tagline}</text>
+
+    <rect x="94" y="180" width="232" height="232" fill="none" stroke="#2a170b" stroke-width="4"/>
+  </g>
+
+  <!-- Photo -->
+  <g clip-path="url(#photoClip)">
+    <image x="100" y="186" width="220" height="220" xlink:href="{avatar}" href="{avatar}" preserveAspectRatio="xMidYMid slice" filter="url(#sepia)"/>
+    <rect x="100" y="186" width="220" height="220" fill="url(#vignette)"/>
+  </g>
+
+  <g filter="url(#ink)">
+    <text x="210" y="458" class="rye" font-size="36" text-anchor="middle" textLength="{min(300, 26 * len(name))}" lengthAdjust="spacingAndGlyphs">{escape(name)}</text>
+    <text x="210" y="484" class="fell" font-size="14" text-anchor="middle" letter-spacing="4">REWARD</text>
+    <text x="210" y="530" class="rye" font-size="44" text-anchor="middle">{amount}</text>
+    <text x="210" y="552" class="rye" font-size="15" text-anchor="middle" letter-spacing="5">DOUBLOONS</text>
+    <text x="210" y="570" class="fell" font-size="9.5" text-anchor="middle" textLength="310" lengthAdjust="spacingAndGlyphs">{escape(crimes)}</text>
+  </g>
+  <text x="210" y="598" class="fell" font-size="9" text-anchor="middle" opacity="0.7">{escape(decree)}</text>
+
+  <!-- Nail -->
+  <ellipse cx="212" cy="32" rx="9" ry="4" fill="#2a170b" opacity="0.35"/>
+  <circle cx="210" cy="28" r="7" fill="url(#nailHead)"/>
 </svg>
 """
 

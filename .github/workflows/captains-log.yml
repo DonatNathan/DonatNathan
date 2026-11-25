@@ -18,6 +18,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install font subsetter (keeps the poster small)
+        run: pip install fonttools
+
       - name: Write today's log and bounty poster
         run: python .github/scripts/captains_log.py
         env:

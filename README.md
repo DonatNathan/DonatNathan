@@ -30,32 +30,6 @@
 
 > I don't target the <b>moon</b>, I target the <b>world</b>.
 
-```
-                    |    |    |
-                   )_)  )_)  )_)
-                  )___))___))___)\
-                 )____)____)_____)\\
-               _____|____|____|____\\\__
-      ---------\                   /---------
-        ^^^^^ ^^^^^^^^^^^^^^^^^^^^^
-          ^^^^      ^^^^     ^^^    ^^
-               ^^^^      ^^^
-```
-
-<br />
-<h2>
-  🏴‍☠️ Crew Manifest
-</h2>
-
-| Rank | Crew member | Duty aboard |
-| :-- | :-- | :-- |
-| 🧭 Captain | **C++** | Gives the orders, fast and fearless |
-| ⚔️ First Mate | **C** | Old sea dog, knows every rope by memory |
-| 🗺️ Navigator | **TypeScript** | Never lets us sail with the wrong type of map |
-| 🔮 Ship's Oracle | **Haskell** | Speaks only in pure riddles, never changes their mind |
-| 🦜 Parrot | **JavaScript** | Loud, everywhere, says `undefined` sometimes |
-| 🐈 Ship's Cat | **Linux** | Rules the ship, everyone knows it |
-
 <br />
 <h2>
   📜 Captain's Log
@@ -64,7 +38,7 @@
 <!-- CAPTAINS-LOG:START -->
 > 📜 **Captain's Log, day 1,882 at sea** (25 November 2026)
 >
-> 🌊 Spyglass pointed at **Saint-Malo**: overcast ☁️, 10°C, winds at 24 km/h.
+> 🌊 Spyglass pointed at **Saint-Malo**: overcast ☁️, 10°C, winds at 25 km/h.
 >
 > 🦜 *"Not all treasure is silver and gold, mate."*
 <!-- CAPTAINS-LOG:END -->
@@ -90,33 +64,6 @@
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/DonatNathan/DonatNathan/output/sea-serpent-dark.svg" />
   <img alt="Sea serpent eating the contribution graph" src="https://raw.githubusercontent.com/DonatNathan/DonatNathan/output/sea-serpent.svg" />
 </picture>
-
-<br />
-<details>
-  <summary><b>🗺️ A treasure map... click if ye dare</b></summary>
-  <br />
-
-```
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ~~~~~~        _______________         ~~~~~~~
-  ~~~~     ____/  /\     ^^    \___       ~~~~~
-  ~~~     /      /  \  .   .   .   \___    ~~~~
-  ~~     |  YOU  .  .  .   ^^       .  \    ~~~
-  ~~     |  ARE         ^^      .    X  |   ~~~
-  ~~~     \ HERE    /\        .  .  .  /   ~~~~
-  ~~~~     \___    /  \    ___________/   ~~~~~
-  ~~~~~~       \__________/              ~~~~~~
-  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-```
-
-  **You found the treasure!** Here be some secrets:
-
-  - ☠️ Why couldn't the pirate learn the alphabet? *Because he always got lost at C.*
-  - 🦜 What's a pirate's favourite language? *You'd think it be R, but his first love be the C.*
-  - ⚓ How do pirates prefer to communicate? *Aye to aye.*
-  - 💾 Where do pirates keep their code? *In a treasure chest, versioned with Arrr-Git.*
-
-</details>
 
 <br />
 <h1 align="center">
