@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="480" viewBox="0 0 360 480">
+  <style>
+    .title { font: bold 64px Georgia, 'Times New Roman', serif; fill: #3b2414; letter-spacing: 6px; }
+    .sub { font: italic 18px Georgia, serif; fill: #5a3a22; }
+    .name { font: bold 30px Georgia, serif; fill: #3b2414; }
+    .row { font: 16px Georgia, serif; fill: #3b2414; }
+    .bounty { font: bold 30px Georgia, serif; fill: #7a1f12; }
+  </style>
+  <defs>
+    <radialGradient id="paper" cx="50%" cy="45%" r="70%">
+      <stop offset="0%" stop-color="#f6e7c1"/>
+      <stop offset="75%" stop-color="#e3c48d"/>
+      <stop offset="100%" stop-color="#b8894d"/>
+    </radialGradient>
+  </defs>
+  <rect x="4" y="4" width="352" height="472" rx="6" fill="url(#paper)" stroke="#6b4423" stroke-width="3"/>
+  <rect x="16" y="16" width="328" height="448" fill="none" stroke="#6b4423" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="180" y="86" class="title" text-anchor="middle">WANTED</text>
+  <text x="180" y="114" class="sub" text-anchor="middle">dead or alive, preferably online</text>
+  <g transform="translate(180 170)" fill="#3b2414">
+    <circle cx="0" cy="-8" r="30"/>
+    <rect x="-16" y="12" width="32" height="18" rx="4"/>
+    <circle cx="-11" cy="-10" r="8" fill="#f2deb0"/>
+    <circle cx="11" cy="-10" r="8" fill="#f2deb0"/>
+    <path d="M-3 4 L0 -2 L3 4 Z" fill="#f2deb0"/>
+    <path d="M-48 36 L48 -20 M-48 -20 L48 36" stroke="#3b2414" stroke-width="9" stroke-linecap="round"/>
+  </g>
+  <text x="180" y="262" class="name" text-anchor="middle">Captain DonatNathan</text>
+  <text x="40" y="300" class="row">Commits plundered</text><text x="320" y="300" class="row" text-anchor="end">1682</text>
+  <text x="40" y="334" class="row">Ships (repos) commanded</text><text x="320" y="334" class="row" text-anchor="end">17</text>
+  <text x="40" y="368" class="row">Stars stolen</text><text x="320" y="368" class="row" text-anchor="end">11</text>
+  <text x="40" y="402" class="row">Crew (followers)</text><text x="320" y="402" class="row" text-anchor="end">24</text>
+  <line x1="40" y1="428" x2="320" y2="428" stroke="#6b4423" stroke-width="1"/>
+  <text x="180" y="458" class="bounty" text-anchor="middle">฿ 30,020 doubloons</text>
+</svg>
