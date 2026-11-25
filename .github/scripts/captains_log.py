@@ -161,7 +161,7 @@ def font_data_uri(filename, text):
 
 
 def avatar_data_uri(url):
-    data, ctype = fetch(f"{url}&s=480" if "?" in url else f"{url}?s=480")
+    data, ctype = fetch(f"{url}&s=900" if "?" in url else f"{url}?s=900")
     return f"data:{ctype};base64," + base64.b64encode(data).decode()
 
 
@@ -171,17 +171,34 @@ def bounty_svg(stats):
     name = stats["name"].upper()
     amount = f"{bounty:,}"
     tagline = "DEAD OR ALIVE"
-    crimes = f"{commits} commits plundered  ·  {stats['repos']} ships  ·  {stats['stars']} stars stolen  ·  {stats['followers']} crew"
+    crimes = [
+        (commits, "COMMITS"),
+        (f"{stats['repos']:,}", "SHIPS"),
+        (f"{stats['stars']:,}", "STARS"),
+        (f"{stats['followers']:,}", "CREW"),
+    ]
+    heading = "KNOWN CRIMES"
     decree = "By order of the Admiralty of the Seven Seas"
 
     rye = font_data_uri("Rye-Regular.ttf", "WANTED" + name + amount + "DOUBLOONS")
-    fell = font_data_uri("IMFellEnglish-Regular.ttf", tagline + crimes + decree + "REWARD")
+    fell = font_data_uri("IMFellEnglish-Regular.ttf", tagline + decree + "REWARD")
+    typewriter = font_data_uri("SpecialElite-Regular.ttf", heading + "".join(v + l for v, l in crimes) + "—")
+    columns = "\n".join(
+        f'    <text x="{97.5 + i * 75}" y="612" class="type" font-size="21" text-anchor="middle">{escape(value)}</text>\n'
+        f'    <text x="{97.5 + i * 75}" y="631" class="type" font-size="12" text-anchor="middle" letter-spacing="2">{label}</text>'
+        for i, (value, label) in enumerate(crimes)
+    )
+    dividers = "\n".join(
+        f'    <line x1="{135 + i * 75}" y1="594" x2="{135 + i * 75}" y2="636" stroke="#2a170b" stroke-width="1"/>' for i in range(3)
+    )
     avatar = avatar_data_uri(stats["avatar_url"])
 
-    return f"""<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="420" height="620" viewBox="0 0 420 620">
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="420" height="700" viewBox="0 0 420 700">
   <style>
     @font-face {{ font-family: 'Rye'; src: url({rye}) format('truetype'); }}
     @font-face {{ font-family: 'Fell'; src: url({fell}) format('truetype'); }}
+    @font-face {{ font-family: 'Typewriter'; src: url({typewriter}) format('truetype'); }}
+    .type {{ font-family: 'Typewriter', 'Courier New', monospace; fill: #1f1108; }}
     .rye {{ font-family: 'Rye', Georgia, serif; fill: #2a170b; }}
     .fell {{ font-family: 'Fell', Georgia, serif; fill: #2a170b; }}
   </style>
@@ -225,6 +242,11 @@ def bounty_svg(stats):
       <feComposite in="wobble" in2="wear" operator="in"/>
     </filter>
 
+    <filter id="inkLight" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" seed="6" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="1.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+
     <!-- Old photograph: sepia, crushed contrast, grain -->
     <filter id="sepia" x="0" y="0" width="100%" height="100%">
       <feColorMatrix type="matrix" values="0.39 0.77 0.19 0 0  0.35 0.69 0.17 0 0  0.27 0.53 0.13 0 0  0 0 0 1 0" result="tone"/>
@@ -255,13 +277,13 @@ def bounty_svg(stats):
 
   <!-- Paper -->
   <g filter="url(#shadow)">
-    <rect x="18" y="16" width="384" height="588" fill="url(#paperFill)" filter="url(#paper)"/>
+    <rect x="18" y="16" width="384" height="668" fill="url(#paperFill)" filter="url(#paper)"/>
   </g>
 
   <!-- Printed content -->
   <g filter="url(#ink)">
-    <rect x="38" y="36" width="344" height="548" fill="none" stroke="#2a170b" stroke-width="3"/>
-    <rect x="45" y="43" width="330" height="534" fill="none" stroke="#2a170b" stroke-width="1"/>
+    <rect x="38" y="36" width="344" height="628" fill="none" stroke="#2a170b" stroke-width="3"/>
+    <rect x="45" y="43" width="330" height="614" fill="none" stroke="#2a170b" stroke-width="1"/>
 
     <text x="210" y="128" class="rye" font-size="84" text-anchor="middle" textLength="300" lengthAdjust="spacingAndGlyphs">WANTED</text>
     <line x1="70" y1="146" x2="350" y2="146" stroke="#2a170b" stroke-width="1.5"/>
@@ -281,9 +303,15 @@ def bounty_svg(stats):
     <text x="210" y="484" class="fell" font-size="14" text-anchor="middle" letter-spacing="4">REWARD</text>
     <text x="210" y="530" class="rye" font-size="44" text-anchor="middle">{amount}</text>
     <text x="210" y="552" class="rye" font-size="15" text-anchor="middle" letter-spacing="5">DOUBLOONS</text>
-    <text x="210" y="570" class="fell" font-size="9.5" text-anchor="middle" textLength="310" lengthAdjust="spacingAndGlyphs">{escape(crimes)}</text>
+    <line x1="70" y1="570" x2="350" y2="570" stroke="#2a170b" stroke-width="1.5"/>
   </g>
-  <text x="210" y="598" class="fell" font-size="9" text-anchor="middle" opacity="0.7">{escape(decree)}</text>
+  <!-- Stats: lighter ink effect so they stay readable -->
+  <g filter="url(#inkLight)">
+    <text x="210" y="585" class="type" font-size="12" text-anchor="middle" letter-spacing="3">— {heading} —</text>
+{columns}
+{dividers}
+  </g>
+  <text x="210" y="651" class="fell" font-size="11" text-anchor="middle" opacity="0.75">{escape(decree)}</text>
 
   <!-- Nail -->
   <ellipse cx="212" cy="32" rx="9" ry="4" fill="#2a170b" opacity="0.35"/>
