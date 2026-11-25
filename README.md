@@ -31,7 +31,7 @@
 ## 🏴‍☠️ Ship's Ledger
 
 <!-- LEDGER:START -->
-<p align="center"><img src="./assets/stats.svg" width="680" alt="1,683 commits plundered, 17 ships commanded, 11 stars stolen, 24 crew members" /></p>
+<p align="center"><img src="./assets/stats.svg" width="680" alt="1,687 commits plundered, 17 ships commanded, 11 stars stolen, 24 crew members" /></p>
 <!-- LEDGER:END -->
 
 ## 🦜 Latest Recruits
