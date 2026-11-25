@@ -14,8 +14,6 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
       - name: Draw the serpent eating the contribution graph
         uses: Platane/snk@v3
         with:
@@ -23,9 +21,6 @@ jobs:
           outputs: |
             dist/sea-serpent.svg?color_snake=#d48a00&color_dots=#e6eef0,#9fd8e0,#4fb3c4,#1d7f99,#0b4a6e
             dist/sea-serpent-dark.svg?color_snake=#f5c542&color_dots=#1c2b36,#0e5f73,#168a9a,#2fbdc4,#7ff0e6
-
-      - name: Send the parrot after the serpent
-        run: python3 .github/scripts/parrot_chase.py dist/sea-serpent.svg dist/sea-serpent-dark.svg
 
       - name: Push the drawings to the output branch
         uses: crazy-max/ghaction-github-pages@v4

@@ -245,59 +245,30 @@ def captains_log(plunder):
 
 # --------------------------------------------------------------------------- ship's ledger
 
-# The stats parrot's trip, as (time %, x, y, flying?). It flies in from the right,
-# perches on a few numbers, then leaves to the left. y = 25 means "standing on a number".
-STATS_FLIGHT = [
-    (0, 800, 6, True), (9, 641, 25, True), (24, 641, 25, False),
-    (29, 450, 2, True), (34, 261, 25, True), (50, 261, 25, False),
-    (55, 360, 4, True), (60, 451, 25, True), (74, 451, 25, False),
-    (79, 250, 2, True), (86, -70, 6, True), (100, -70, 6, True),
-]
-
-
-def stats_parrot_css(duration=22):
-    moves = " ".join(f"{pct}% {{ transform: translate({x}px, {y}px); }}" for pct, x, y, _ in STATS_FLIGHT)
-    # Flap fast while flying, fold the wing while perched
-    flaps = []
-    for (p0, *_rest, flying), (p1, *_r) in zip(STATS_FLIGHT, STATS_FLIGHT[1:]):
-        steps = max(1, round((p1 - p0) * duration / 100 / 0.14)) if flying else 1
-        for k in range(steps):
-            pct = p0 + (p1 - p0) * k / steps
-            angle = (-30 if k % 2 else 0) if flying else 0
-            flaps.append(f"{pct:.2f}% {{ transform: rotate({angle}deg); }}")
-    return (f".trip {{ animation: trip {duration}s ease-in-out infinite; }}\n"
-            f"    @keyframes trip {{ {moves} }}\n"
-            f"    .st-wing {{ animation: st-flap {duration}s linear infinite !important; }}\n"
-            f"    @keyframes st-flap {{ {' '.join(flaps)} 100% {{ transform: rotate(0deg); }} }}")
-
-
 def ledger(stats):
-    """Four stats as a transparent image: big teal numbers, grey labels, thin dividers, and a parrot hopping between them."""
+    """Four stats as a transparent image: big teal numbers, grey labels, thin dividers."""
     cells = [
         (stats["commits"], "Commits plundered"),
         (stats["repos"], "Ships commanded"),
         (stats["stars"], "Stars stolen"),
         (stats["followers"], "Crew members"),
     ]
-    col, top = 190, 56  # top: room above the numbers for the parrot
+    col = 190
     parts = []
     for i, (value, label) in enumerate(cells):
         cx = col * i + col / 2
         parts.append(
-            f'<text x="{cx}" y="{top + 52}" text-anchor="middle" class="num">{value:,}</text>'
-            f'<text x="{cx}" y="{top + 80}" text-anchor="middle" class="label">{label}</text>'
+            f'<text x="{cx}" y="52" text-anchor="middle" class="num">{value:,}</text>'
+            f'<text x="{cx}" y="80" text-anchor="middle" class="label">{label}</text>'
         )
         if i:
-            parts.append(f'<line x1="{col * i}" y1="{top + 18}" x2="{col * i}" y2="{top + 84}" stroke="#8b949e" stroke-opacity="0.35"/>')
-    (ASSETS / "stats.svg").write_text(f"""<svg xmlns="http://www.w3.org/2000/svg" width="{col * 4}" height="{top + 100}" viewBox="0 0 {col * 4} {top + 100}">
+            parts.append(f'<line x1="{col * i}" y1="18" x2="{col * i}" y2="84" stroke="#8b949e" stroke-opacity="0.35"/>')
+    (ASSETS / "stats.svg").write_text(f"""<svg xmlns="http://www.w3.org/2000/svg" width="{col * 4}" height="100" viewBox="0 0 {col * 4} 100">
   <style>
     .num {{ font: 700 38px -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #2c9ab7; }}
     .label {{ font: 600 12px -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #8b949e; letter-spacing: 1.5px; text-transform: uppercase; }}
-    {parrot_css("st", talk=False)}
-    {stats_parrot_css()}
   </style>
   {''.join(parts)}
-  <g class="trip">{parrot("st", 0, 0, 46, face_right=False).replace('class="st-wing"', 'class="st-wing"')}</g>
 </svg>
 """, encoding="utf-8")
     return '<p align="center"><img src="./assets/stats.svg" width="680" alt="' + ", ".join(f"{v:,} {l.lower()}" for v, l in cells) + '" /></p>'
