@@ -26,7 +26,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Write the log, ledger, recruits and bottles
+      - name: Write the header, parrot, ledger, recruits and bottles
         run: python .github/scripts/captains_log.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md assets/recruits
+          git add README.md assets/recruits assets/parrot.svg assets/stats.svg
           git diff --cached --quiet && exit 0
           git commit -m "📜 Captain's Log: $(date -u +%F)"
           git pull --rebase

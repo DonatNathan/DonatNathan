@@ -1,4 +1,7 @@
+<!-- HEADER:START -->
+<h2 align="center">⚓ Captain Donat · Day 1,882 at sea</h2>
 <br />
+<!-- HEADER:END -->
 
 <p align="center">
   <img src="https://readme-typing-svg.demolab.com?font=Pirata+One&size=30&duration=2800&pause=900&color=2C9AB7&center=true&vCenter=true&width=640&lines=Ahoy+Sailors%21;I%27m+Nathan%2C+a+French+developer;Arr%2C+compiling+me+code...;Searching+for+buried+treasure;Avoiding+the+Kraken+%28and+merge+conflicts%29;Dead+code+tells+no+tales;Hoist+the+sails%2C+push+to+main%21;Yo+ho+ho+and+a+bottle+of+coffee;Fifteen+bugs+on+a+dead+man%27s+chest;Walk+the+plank%2C+legacy+code%21;It+works+on+my+ship;X+marks+the+spot...+of+the+bug;Sailing+the+world+on+a+wooden+ship;I+don%27t+target+the+moon%2C+I+target+the+world" alt="Ahoy Sailors!" />
@@ -12,30 +15,23 @@
   <img src="https://img.shields.io/badge/Status-Sailing-1a9a8c?style=for-the-badge" alt="Status: Sailing" />
 </p>
 
-## 📜 Captain's Log
-
 <!-- CAPTAINS-LOG:START -->
-### Day 1,882 at sea
-<sub>25 November 2026</sub>
+<br /><br /><br />
 
-🗺️ **Last seen plundering** [foundry\-coding\-style](https://github.com/DonatNathan/foundry-coding-style), *1 day ago*
+<h3 align="center">🗺️ Last seen plundering <a href="https://github.com/DonatNathan/foundry-coding-style">foundry-coding-style</a></h3>
+<p align="center"><sub>1 day ago</sub></p>
 
-🦜 **The parrot overheard** `add: link to referenced rules` and won't stop repeating:
+<p align="center"><a href="https://github.com/DonatNathan/foundry-coding-style"><img src="./assets/parrot.svg" width="640" alt="The parrot repeats the last commit in pirate speak" /></a></p>
 
-> ***Blimey\! bring aboard: link to referenced rules\! Hoist the colours\!***
+<p align="center"><sub>🦜 The parrot overheard <code>add: link to referenced rules</code> and won't stop repeating it.</sub></p>
+
+<br /><br /><br />
 <!-- CAPTAINS-LOG:END -->
 
 ## 🏴‍☠️ Ship's Ledger
 
 <!-- LEDGER:START -->
-**🏴‍☠️ Rank:** Quartermaster  
-`█████████████░░░░░░░` 67% of the way to **First Mate**
-
-**💰 Bounty:** 30,030 doubloons on me head
-
-| ⚔️ Commits plundered | 🚢 Ships commanded | ⭐ Stars stolen | 🦜 Crew members |
-| :-: | :-: | :-: | :-: |
-| **1,683** | **17** | **11** | **24** |
+<p align="center"><img src="./assets/stats.svg" width="680" alt="1,683 commits plundered, 17 ships commanded, 11 stars stolen, 24 crew members" /></p>
 <!-- LEDGER:END -->
 
 ## 🦜 Latest Recruits

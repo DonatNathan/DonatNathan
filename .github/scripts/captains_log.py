@@ -1,7 +1,7 @@
 """Daily update of the profile README.
 
-Writes the Captain's Log (day at sea, last seen plundering, the parrot's pirate translation),
-the Ship's Ledger (pirate rank and stats), the latest recruits (assets/recruits/*.svg)
+Writes the header (captain's name, day at sea), the last seen plundering with the parrot
+(assets/parrot.svg), the Ship's Ledger stats, the latest recruits (assets/recruits/*.svg)
 and the bottles washed ashore into README.md.
 
 Runs from .github/workflows/captains-log.yml. Uses only the standard library.
@@ -14,6 +14,7 @@ import json
 import os
 import random
 import re
+import textwrap
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -25,19 +26,6 @@ README = ROOT / "README.md"
 ASSETS = ROOT / "assets"
 BOTTLE_TITLE = "Message in a bottle"
 HIDE_LABEL = "sunk"  # put this label on a bottle issue to hide it from the README
-
-RANKS = [
-    (0, "Cabin Boy"),
-    (2_000, "Powder Monkey"),
-    (5_000, "Deckhand"),
-    (10_000, "Boatswain"),
-    (20_000, "Quartermaster"),
-    (35_000, "First Mate"),
-    (60_000, "Captain"),
-    (100_000, "Commodore"),
-    (200_000, "Dread Pirate Legend"),
-]
-
 
 # --------------------------------------------------------------------------- helpers
 
@@ -150,7 +138,7 @@ def last_plunder(now):
     return None
 
 
-# --------------------------------------------------------------------------- stats & rank
+# --------------------------------------------------------------------------- stats
 
 def fetch_stats():
     user = gh(f"users/{USER}")
@@ -159,71 +147,134 @@ def fetch_stats():
         commits = gh(f"search/commits?q=author:{USER}")["total_count"]
     except Exception:
         commits = 0
-    stats = {
+    return {
+        "name": user["name"] or user["login"],
         "created": parse_date(user["created_at"]).date(),
         "repos": user["public_repos"],
         "followers": user["followers"],
         "stars": sum(r["stargazers_count"] for r in repos),
         "commits": commits,
     }
-    stats["bounty"] = (stats["commits"] * 10 + stats["stars"] * 500
-                       + stats["followers"] * 250 + stats["repos"] * 100)
-    return stats
 
 
-def rank_for(bounty):
-    index = max(i for i, (floor, _) in enumerate(RANKS) if bounty >= floor)
-    floor, title = RANKS[index]
-    if index + 1 < len(RANKS):
-        nxt_floor, nxt_title = RANKS[index + 1]
-        progress = (bounty - floor) / (nxt_floor - floor)
-    else:
-        nxt_floor, nxt_title, progress = None, None, 1.0
-    return {"index": index, "title": title, "next": nxt_title, "next_floor": nxt_floor, "progress": progress}
+# --------------------------------------------------------------------------- header
 
-
-# --------------------------------------------------------------------------- captain's log
-
-def captains_log(stats, plunder, now):
+def header(stats, now):
     days = (now.date() - stats["created"]).days
-    lines = [f"### Day {days:,} at sea", f"<sub>{now:%d %B %Y}</sub>", ""]
-    if plunder:
-        order = plunder["message"].replace("`", "'")
-        if len(order) > 120:
-            order = order[:119] + "…"
-        lines += [
-            f"🗺️ **Last seen plundering** [{md_safe(plunder['repo'], 60)}]({plunder['url']}), *{plunder['ago']}*",
-            "",
-            f"🦜 **The parrot overheard** `{order}` and won't stop repeating:",
-            "",
-            f"> ***{md_safe(piratify(plunder['message']), 200)}***",
-        ]
-    else:
-        lines += ["🗺️ *No plundering spotted lately... the captain must be resting.*"]
-    return "\n".join(lines)
+    return "\n".join([
+        f'<h2 align="center">⚓ Captain {html.escape(stats["name"])} · Day {days:,} at sea</h2>',
+        "<br />",
+    ])
+
+
+# --------------------------------------------------------------------------- the parrot
+
+PARROT_EMOJI = ASSETS / "emoji" / "parrot.svg"  # Noto Emoji parrot, Apache 2.0 (see assets/emoji/NOTICE.md)
+
+
+def parrot_image():
+    """The emoji parrot, mirrored so it faces the speech bubble."""
+    data = base64.b64encode(PARROT_EMOJI.read_bytes()).decode()
+    return (f'<image href="data:image/svg+xml;base64,{data}" x="14" y="36" width="160" height="160" '
+            f'transform="translate(188 0) scale(-1 1)"/>')
+
+
+def parrot_svg(sentence):
+    lines = textwrap.wrap(sentence, 38) or [""]
+    if len(lines) > 4:
+        lines = lines[:4]
+        lines[-1] = lines[-1][:37].rstrip() + "…"
+    line_h, pad = 32, 30
+    bx, by, bw = 200, 20, 480
+    bh = pad * 2 + line_h * len(lines) - 8
+    height = max(236, by + bh + 24)
+    text = "".join(
+        f'<text x="{bx + bw / 2}" y="{by + pad + 22 + i * line_h}" text-anchor="middle">{html.escape(line)}</text>'
+        for i, line in enumerate(lines)
+    )
+    beak_y = 78
+    tail_top, tail_bottom = max(by + 18, beak_y - 14), max(by + 42, beak_y + 12)
+    r = 18
+    bubble = (f"M{bx + r} {by} H {bx + bw - r} a {r} {r} 0 0 1 {r} {r} V {by + bh - r} a {r} {r} 0 0 1 -{r} {r} "
+              f"H {bx + r} a {r} {r} 0 0 1 -{r} -{r} V {tail_bottom} L 176 {beak_y} L {bx} {tail_top} V {by + r} a {r} {r} 0 0 1 {r} -{r} Z")
+    sx, sy = bx + bw - 26, by + bh - 24  # skull stamp, bottom-right corner
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="700" height="{height}" viewBox="0 0 700 {height}">
+  <defs>
+    <radialGradient id="parchment" cx="50%" cy="45%" r="65%">
+      <stop offset="0%" stop-color="#f7e9c4"/>
+      <stop offset="70%" stop-color="#ecd39d"/>
+      <stop offset="100%" stop-color="#d6b273"/>
+    </radialGradient>
+  </defs>
+  {parrot_image()}
+  <!-- Parchment bubble with a braided rope border -->
+  <path d="{bubble}" fill="url(#parchment)"/>
+  <path d="{bubble}" fill="none" stroke="#5a3a1c" stroke-width="7" stroke-linejoin="round"/>
+  <path d="{bubble}" fill="none" stroke="#c9995a" stroke-width="4" stroke-linejoin="round" stroke-dasharray="6 4"/>
+  <path d="{bubble}" fill="none" stroke="#e8c58c" stroke-width="1.2" stroke-linejoin="round" stroke-dasharray="3 7" stroke-dashoffset="-1"/>
+  <g font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-weight="700" font-size="24" fill="#3b2414">{text}</g>
+  <g transform="translate({sx} {sy})" fill="#5a3a1c" opacity="0.55">
+    <path d="M-10 -10 L10 10 M10 -10 L-10 10" stroke="#5a3a1c" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="0" cy="-3" r="7"/>
+    <rect x="-4" y="2" width="8" height="5" rx="1.5"/>
+    <circle cx="-2.6" cy="-3.5" r="1.8" fill="#f0dcaa"/>
+    <circle cx="2.6" cy="-3.5" r="1.8" fill="#f0dcaa"/>
+  </g>
+</svg>
+"""
+
+
+def captains_log(plunder):
+    if not plunder:
+        (ASSETS / "parrot.svg").write_text(parrot_svg("Squawk! The captain be restin' today!"), encoding="utf-8")
+        return '<p align="center"><img src="./assets/parrot.svg" width="640" alt="The parrot squawks" /></p>'
+    (ASSETS / "parrot.svg").write_text(parrot_svg(piratify(plunder["message"])), encoding="utf-8")
+    order = html.escape(plunder["message"].replace("`", "'"))
+    if len(order) > 120:
+        order = order[:119] + "…"
+    return "\n".join([
+        "<br /><br /><br />",
+        "",
+        f'<h3 align="center">🗺️ Last seen plundering <a href="{plunder["url"]}">{html.escape(plunder["repo"])}</a></h3>',
+        f'<p align="center"><sub>{plunder["ago"]}</sub></p>',
+        "",
+        f'<p align="center"><a href="{plunder["url"]}"><img src="./assets/parrot.svg" width="640" alt="The parrot repeats the last commit in pirate speak" /></a></p>',
+        "",
+        f'<p align="center"><sub>🦜 The parrot overheard <code>{order}</code> and won\'t stop repeating it.</sub></p>',
+        "",
+        "<br /><br /><br />",
+    ])
 
 
 # --------------------------------------------------------------------------- ship's ledger
 
 def ledger(stats):
-    rank = rank_for(stats["bounty"])
-    slots = 20
-    filled = round(rank["progress"] * slots)
-    bar = "█" * filled + "░" * (slots - filled)
-    if rank["next"]:
-        progress = f"`{bar}` {round(rank['progress'] * 100)}% of the way to **{rank['next']}**"
-    else:
-        progress = f"`{bar}` the most feared pirate on the seven seas"
-    return "\n".join([
-        f"**🏴‍☠️ Rank:** {rank['title']}  ",
-        progress,
-        "",
-        f"**💰 Bounty:** {stats['bounty']:,} doubloons on me head",
-        "",
-        "| ⚔️ Commits plundered | 🚢 Ships commanded | ⭐ Stars stolen | 🦜 Crew members |",
-        "| :-: | :-: | :-: | :-: |",
-        f"| **{stats['commits']:,}** | **{stats['repos']:,}** | **{stats['stars']:,}** | **{stats['followers']:,}** |",
-    ])
+    """Four stats as a transparent image: big teal numbers, grey labels, thin dividers."""
+    cells = [
+        (stats["commits"], "Commits plundered"),
+        (stats["repos"], "Ships commanded"),
+        (stats["stars"], "Stars stolen"),
+        (stats["followers"], "Crew members"),
+    ]
+    col = 190
+    parts = []
+    for i, (value, label) in enumerate(cells):
+        cx = col * i + col / 2
+        parts.append(
+            f'<text x="{cx}" y="52" text-anchor="middle" class="num">{value:,}</text>'
+            f'<text x="{cx}" y="80" text-anchor="middle" class="label">{label}</text>'
+        )
+        if i:
+            parts.append(f'<line x1="{col * i}" y1="18" x2="{col * i}" y2="84" stroke="#8b949e" stroke-opacity="0.35"/>')
+    (ASSETS / "stats.svg").write_text(f"""<svg xmlns="http://www.w3.org/2000/svg" width="{col * 4}" height="100" viewBox="0 0 {col * 4} 100">
+  <style>
+    .num {{ font: 700 38px -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #2c9ab7; }}
+    .label {{ font: 600 12px -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #8b949e; letter-spacing: 1.5px; text-transform: uppercase; }}
+  </style>
+  {''.join(parts)}
+</svg>
+""", encoding="utf-8")
+    return '<p align="center"><img src="./assets/stats.svg" width="680" alt="' + ", ".join(f"{v:,} {l.lower()}" for v, l in cells) + '" /></p>'
 
 
 # --------------------------------------------------------------------------- latest recruits
@@ -327,9 +378,11 @@ def replace_block(text, name, content):
 def main():
     now = datetime.now(timezone.utc)
     stats = fetch_stats()
+    ASSETS.mkdir(exist_ok=True)
 
     text = README.read_text(encoding="utf-8")
-    text = replace_block(text, "CAPTAINS-LOG", captains_log(stats, last_plunder(now), now))
+    text = replace_block(text, "HEADER", header(stats, now))
+    text = replace_block(text, "CAPTAINS-LOG", captains_log(last_plunder(now)))
     text = replace_block(text, "LEDGER", ledger(stats))
     text = replace_block(text, "RECRUITS", recruits(latest_followers(stats["followers"])))
     washed = bottles(now)
