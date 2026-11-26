@@ -1,5 +1,5 @@
 <!-- HEADER:START -->
-<h2 align="center">⚓ Captain Donat · Day 1,882 at sea</h2>
+<h2 align="center">⚓ Captain Donat · Day 1,883 at sea</h2>
 <br />
 <!-- HEADER:END -->
 
@@ -31,7 +31,7 @@
 ## 🏴‍☠️ Ship's Ledger
 
 <!-- LEDGER:START -->
-<p align="center"><img src="./assets/stats.svg" width="680" alt="1,688 commits plundered, 17 ships commanded, 11 stars stolen, 24 crew members" /></p>
+<p align="center"><img src="./assets/stats.svg" width="680" alt="907 commits plundered, 17 ships commanded, 11 stars stolen, 24 crew members" /></p>
 <!-- LEDGER:END -->
 
 ## 🦜 Latest Recruits
