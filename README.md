@@ -1,5 +1,5 @@
 <!-- HEADER:START -->
-<h2 align="center">⚓ Captain Donat · Day 1,883 at sea</h2>
+<h2 align="center">⚓ Captain Donat · Day 1,884 at sea</h2>
 <br />
 <!-- HEADER:END -->
 
@@ -19,7 +19,7 @@
 <br /><br /><br />
 
 <h3 align="center">🗺️ Last seen plundering <a href="https://github.com/DonatNathan/foundry-coding-style">foundry-coding-style</a></h3>
-<p align="center"><sub>1 day ago</sub></p>
+<p align="center"><sub>2 days ago</sub></p>
 
 <p align="center"><a href="https://github.com/DonatNathan/foundry-coding-style"><img src="./assets/parrot.svg" width="640" alt="The parrot repeats the last commit in pirate speak" /></a></p>
 
